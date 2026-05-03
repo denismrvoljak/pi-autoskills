@@ -1,5 +1,9 @@
 # pi-autoskills
 
+```bash
+pi install npm:pi-autoskills
+```
+
 Audited autoskills-style skill installer for pi.
 
 `pi-autoskills` detects stack from project files, matches skills from Claude/Codex/pi registries, prefers bundled audited local copies, and when needed fetches upstream bundles, audits + rewrites them into local cache, then installs only audited copies into `.pi/skills/`.
@@ -37,23 +41,61 @@ Audited autoskills-style skill installer for pi.
 
 ## Install
 
-### Use CLI from source
+### From npm
+
+Install package into pi:
 
 ```bash
-pnpm install
-node --experimental-strip-types ./bin/pi-autoskills.ts --dry-run
-```
-
-### Install into pi from local checkout
-
-```bash
-pi install /absolute/path/to/pi-autoskills
+pi install npm:pi-autoskills
 ```
 
 Project-local install:
 
 ```bash
+pi install -l npm:pi-autoskills
+```
+
+One-off test without install:
+
+```bash
+pi -e npm:pi-autoskills
+```
+
+### Global CLI from npm
+
+```bash
+npm install -g pi-autoskills
+pi-autoskills --dry-run
+```
+
+### One-shot CLI
+
+```bash
+npx pi-autoskills --dry-run
+```
+
+### From GitHub
+
+```bash
+pi install https://github.com/denismrvoljak/pi-autoskills
+```
+
+### Local path install
+
+Use this when developing on package itself:
+
+```bash
+pi install /absolute/path/to/pi-autoskills
+pi list
+```
+
+### Project-local local path install
+
+Use this for clean temporary environment or project-scoped setup:
+
+```bash
 pi install -l /absolute/path/to/pi-autoskills
+pi list
 ```
 
 Then inside pi:
@@ -62,48 +104,27 @@ Then inside pi:
 /autoskills
 ```
 
-### After npm publish
-
-Global CLI:
-
-```bash
-npm install -g pi-autoskills
-pi-autoskills --dry-run
-```
-
-Or one-shot:
-
-```bash
-npx pi-autoskills --dry-run
-```
-
-Install package into pi from npm:
-
-```bash
-pi install pi-autoskills
-```
-
-Project-local package install into pi:
-
-```bash
-pi install -l pi-autoskills
-```
-
 ## Quick start
 
-### 1. Preview matches in project
+### 1. Install package into pi
+
+```bash
+pi install npm:pi-autoskills
+```
+
+### 2. Preview matches in project with CLI
 
 ```bash
 pi-autoskills --project /path/to/project --dry-run
 ```
 
-### 2. Install skills
+### 3. Install skills with CLI
 
 ```bash
 pi-autoskills --project /path/to/project
 ```
 
-### 3. Use inside pi
+### 4. Use inside pi
 
 ```text
 /autoskills detect
@@ -215,12 +236,49 @@ export PI_AUTOSKILLS_CATALOG_INDEX=/absolute/path/to/index.json
 
 If catalog missing, discovery falls back to GitHub repo tree scans.
 
-## Development
+## Local development install
+
+Run `pnpm install` once in package repo before using local path install or CLI from source.
 
 ```bash
+cd /absolute/path/to/pi-autoskills
 pnpm install
+```
+
+Run checks:
+
+```bash
+cd /absolute/path/to/pi-autoskills
 pnpm check
 node --experimental-strip-types ./src/commands/validate-registry.ts
+```
+
+Run CLI from repo:
+
+```bash
+cd /absolute/path/to/pi-autoskills
+node --experimental-strip-types ./bin/pi-autoskills.ts --dry-run
+```
+
+For clean project-local dev check:
+
+```bash
+cd /absolute/path/to/pi-autoskills
+pnpm install
+
+export PI_CODING_AGENT_DIR="$(mktemp -d)"
+tmp_proj="$(mktemp -d)"
+cd "$tmp_proj"
+
+pi install -l /absolute/path/to/pi-autoskills
+pi list
+pi
+```
+
+Inside pi:
+
+```text
+/autoskills detect
 ```
 
 ## Maintainer workflow
