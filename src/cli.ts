@@ -1,11 +1,14 @@
-import { join, resolve } from "node:path";
+import { resolve } from "node:path";
 
-import { createInstallPlan, installPlan } from "./install.ts";
-import { getDefaultRegistryDir } from "./registry.ts";
+import { createInstallPlanWithDiscovery, installPlan } from "./install.ts";
+import { getDefaultCacheRegistryDir, getDefaultRegistryDir } from "./registry.ts";
+import type { InstallPlan } from "./types.ts";
 
 interface CliArgs {
   projectDir: string;
   registryDir: string;
+  cacheRegistryDir: string;
+  reviewer?: "auto" | "static" | "pi" | "none";
   dryRun: boolean;
   help: boolean;
 }
@@ -13,10 +16,17 @@ interface CliArgs {
 function parseArgs(argv: string[]): CliArgs {
   const projectDirFlag = valueAfter(argv, "--project") ?? process.cwd();
   const registryDirFlag = valueAfter(argv, "--registry-dir");
+  const cacheRegistryDirFlag = valueAfter(argv, "--cache-registry-dir");
+  const reviewerFlag = valueAfter(argv, "--reviewer");
+  const projectDir = resolve(projectDirFlag);
 
   return {
-    projectDir: resolve(projectDirFlag),
-    registryDir: resolve(registryDirFlag ?? getDefaultRegistryDir(resolve(projectDirFlag))),
+    projectDir,
+    registryDir: resolve(registryDirFlag ?? getDefaultRegistryDir(projectDir)),
+    cacheRegistryDir: resolve(cacheRegistryDirFlag ?? getDefaultCacheRegistryDir(projectDir)),
+    reviewer: reviewerFlag === "auto" || reviewerFlag === "static" || reviewerFlag === "pi" || reviewerFlag === "none"
+      ? reviewerFlag
+      : undefined,
     dryRun: argv.includes("--dry-run"),
     help: argv.includes("--help") || argv.includes("-h"),
   };
@@ -28,13 +38,14 @@ function valueAfter(args: string[], flag: string): string | undefined {
 }
 
 function showHelp(): void {
-  console.log(`pi-autoskills\n\nUsage:\n  pi-autoskills\n  pi-autoskills --dry-run\n  pi-autoskills --project /path/to/project\n  pi-autoskills --registry-dir /path/to/registry\n`);
+  console.log(`pi-autoskills\n\nUsage:\n  pi-autoskills\n  pi-autoskills --dry-run\n  pi-autoskills --project /path/to/project\n  pi-autoskills --registry-dir /path/to/registry\n  pi-autoskills --cache-registry-dir /path/to/cache-registry\n  pi-autoskills --reviewer auto|static|pi|none\n`);
 }
 
-function printPlan(plan: ReturnType<typeof createInstallPlan>): void {
+function printPlan(plan: InstallPlan): void {
   console.log(`Project: ${plan.projectDir}`);
   console.log(`Output:  ${plan.outputDir}`);
   console.log(`Lock:    ${plan.lockfilePath}`);
+  console.log(`Cache:   ${plan.cacheRegistryDir}`);
   console.log("");
   console.log(`Detected technologies (${plan.technologies.length}):`);
   for (const tech of plan.technologies) console.log(`  - ${tech.name}`);
@@ -45,15 +56,23 @@ function printPlan(plan: ReturnType<typeof createInstallPlan>): void {
     for (const combo of plan.combos) console.log(`  - ${combo.name}`);
   }
   console.log("");
-  console.log(`Available skills (${plan.skills.length}):`);
+  console.log(`Available local skills (${plan.skills.length}):`);
   for (const skill of plan.skills) {
     console.log(`  - ${skill.registryId}  ← ${skill.reasons.join(", ")}`);
   }
   if (plan.skills.length === 0) console.log("  - none");
 
+  if (plan.discoveredSkills.length > 0) {
+    console.log("");
+    console.log(`Discovered skills (${plan.discoveredSkills.length}):`);
+    for (const skill of plan.discoveredSkills) {
+      console.log(`  - ${skill.registryId}  ← ${skill.reasons.join(", ")}`);
+    }
+  }
+
   if (plan.unavailableSkills.length > 0) {
     console.log("");
-    console.log(`Unavailable matches (${plan.unavailableSkills.length}):`);
+    console.log(`Deferred matches (${plan.unavailableSkills.length}):`);
     for (const skill of plan.unavailableSkills) {
       console.log(`  - ${skill.registryId}  ← ${skill.reasons.join(", ")} (${skill.availability}: ${skill.detail})`);
     }
@@ -67,28 +86,35 @@ export async function runCli(argv = process.argv.slice(2)): Promise<number> {
     return 0;
   }
 
-  const plan = createInstallPlan(args.projectDir, args.registryDir);
-  printPlan(plan);
+  const previousReviewer = process.env.PI_AUTOSKILLS_REVIEWER;
+  if (args.reviewer) process.env.PI_AUTOSKILLS_REVIEWER = args.reviewer;
 
-  if (args.dryRun) return 0;
+  try {
+    const plan = await createInstallPlanWithDiscovery(args.projectDir, args.registryDir, undefined, args.cacheRegistryDir);
+    printPlan(plan);
 
-  const result = installPlan(plan, args.registryDir);
-  for (const skill of plan.unavailableSkills) {
-    result.warnings.push(`Unavailable ${skill.registryId}: ${skill.detail}`);
+    if (args.dryRun) return 0;
+
+    const result = await installPlan(plan, args.registryDir, args.cacheRegistryDir);
+    console.log("");
+    console.log(`Installed: ${result.installed.length}`);
+    for (const name of result.installed) console.log(`  ✓ ${name}`);
+    if (result.skipped.length > 0) {
+      console.log(`Skipped: ${result.skipped.length}`);
+      for (const name of result.skipped) console.log(`  - ${name}`);
+    }
+    if (result.warnings.length > 0) {
+      console.log("Warnings:");
+      for (const warning of result.warnings) console.log(`  ! ${warning}`);
+    }
+    console.log(`Lockfile: ${result.lockfilePath}`);
+    return result.skipped.length > 0 ? 1 : 0;
+  } finally {
+    if (args.reviewer) {
+      if (previousReviewer === undefined) delete process.env.PI_AUTOSKILLS_REVIEWER;
+      else process.env.PI_AUTOSKILLS_REVIEWER = previousReviewer;
+    }
   }
-  console.log("");
-  console.log(`Installed: ${result.installed.length}`);
-  for (const name of result.installed) console.log(`  ✓ ${name}`);
-  if (result.skipped.length > 0) {
-    console.log(`Skipped: ${result.skipped.length}`);
-    for (const name of result.skipped) console.log(`  - ${name}`);
-  }
-  if (result.warnings.length > 0) {
-    console.log("Warnings:");
-    for (const warning of result.warnings) console.log(`  ! ${warning}`);
-  }
-  console.log(`Lockfile: ${result.lockfilePath}`);
-  return result.skipped.length > 0 ? 1 : 0;
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname)) {

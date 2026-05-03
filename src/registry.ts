@@ -8,6 +8,10 @@ export function getDefaultRegistryDir(_projectRoot?: string): string {
   return resolve(join(import.meta.dirname, "..", "registry"));
 }
 
+export function getDefaultCacheRegistryDir(projectRoot: string): string {
+  return resolve(join(projectRoot, ".pi", "autoskills-registry"));
+}
+
 export function loadManifest(registryDir: string): RegistryManifest {
   const path = join(registryDir, "index.json");
   if (!existsSync(path)) {

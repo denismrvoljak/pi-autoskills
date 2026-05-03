@@ -4,6 +4,7 @@ import { join, resolve } from "node:path";
 import { COMBO_RULES, FRONTEND_BONUS_SKILLS, TECHNOLOGY_RULES } from "../maps.ts";
 import { createRegistryEntry, getDefaultRegistryDir, loadManifest, writeManifest } from "../registry.ts";
 import { syncUpstreamRegistry } from "../sync.ts";
+import type { SkillSource } from "../types.ts";
 
 function parseArg(flag: string): string | undefined {
   const index = process.argv.indexOf(flag);
@@ -11,7 +12,7 @@ function parseArg(flag: string): string | undefined {
 }
 
 function collectSkills() {
-  const all = new Map<string, { source: "claude" | "codex" | "pi"; sourceRepo: string; sourcePath: string }>();
+  const all = new Map<string, { source: SkillSource["source"]; sourceRepo: string; sourcePath: string }>();
   for (const rule of [...TECHNOLOGY_RULES, ...COMBO_RULES]) {
     for (const skill of rule.skills) {
       all.set(skill.registryId, skill);

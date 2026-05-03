@@ -16,7 +16,7 @@ export interface DetectConfig {
 
 export interface SkillSource {
   registryId: string;
-  source: "claude" | "codex" | "pi";
+  source: "claude" | "codex" | "pi" | "upstream";
   sourceRepo: string;
   sourcePath: string;
 }
@@ -55,7 +55,7 @@ export interface MatchResult {
 }
 
 export interface UnavailableSkill extends MatchResult {
-  availability: "missing" | "blocked" | "integrity-error";
+  availability: "fetchable" | "missing" | "blocked" | "integrity-error";
   detail: string;
 }
 
@@ -99,11 +99,14 @@ export interface RegistryManifest {
 export interface InstallPlan {
   projectDir: string;
   registryDir: string;
+  cacheRegistryDir: string;
   outputDir: string;
   lockfilePath: string;
   technologies: DetectedTechnology[];
   isFrontend: boolean;
   combos: Array<{ id: string; name: string }>;
+  matchedSkills: MatchResult[];
+  discoveredSkills: MatchResult[];
   skills: MatchResult[];
   unavailableSkills: UnavailableSkill[];
 }

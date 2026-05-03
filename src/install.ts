@@ -11,9 +11,28 @@ import {
 import { dirname, join } from "node:path";
 
 import { detectTechnologies } from "./detect.ts";
+import { discoverSkills } from "./discovery.ts";
 import { matchSkills } from "./match.ts";
-import { getDefaultRegistryDir, loadManifest, verifyManifestEntry } from "./registry.ts";
-import type { InstallPlan, InstallResult, MatchResult, UnavailableSkill } from "./types.ts";
+import {
+  getDefaultCacheRegistryDir,
+  getDefaultRegistryDir,
+  loadManifest,
+  verifyManifestEntry,
+} from "./registry.ts";
+import { cacheSkillFromSource } from "./sync.ts";
+import type {
+  InstallPlan,
+  InstallResult,
+  MatchResult,
+  RegistryEntry,
+  RegistryManifest,
+  UnavailableSkill,
+} from "./types.ts";
+
+interface ResolvedSkill {
+  registryDir: string;
+  entry: RegistryEntry;
+}
 
 function copyVerifiedFiles(srcDir: string, destDir: string, files: string[]): void {
   mkdirSync(destDir, { recursive: true });
@@ -25,63 +44,184 @@ function copyVerifiedFiles(srcDir: string, destDir: string, files: string[]): vo
   }
 }
 
-function partitionSkills(registryDir: string, skills: MatchResult[]): {
-  available: MatchResult[];
-  unavailable: UnavailableSkill[];
-} {
-  const manifest = loadManifest(registryDir);
-  const available: MatchResult[] = [];
-  const unavailable: UnavailableSkill[] = [];
+function getManifest(cache: Map<string, RegistryManifest>, registryDir: string): RegistryManifest {
+  const existing = cache.get(registryDir);
+  if (existing) return existing;
+  const loaded = loadManifest(registryDir);
+  cache.set(registryDir, loaded);
+  return loaded;
+}
 
-  for (const skill of skills) {
+function resolveLocalSkill(
+  registryDirs: string[],
+  skill: MatchResult,
+  manifestCache: Map<string, RegistryManifest>,
+): { resolved?: ResolvedSkill; unavailable?: UnavailableSkill } {
+  let sawIntegrityError = false;
+  let integrityDetail = "integrity verification failed";
+
+  for (const registryDir of registryDirs) {
+    const manifest = getManifest(manifestCache, registryDir);
     const entry = manifest.skills[skill.registryId];
-    if (!entry) {
-      unavailable.push({ ...skill, availability: "missing", detail: "not mirrored in audited local registry" });
-      continue;
-    }
+    if (!entry) continue;
 
     if (entry.review.status === "rejected" || entry.securityCheck.status === "blocked") {
-      unavailable.push({ ...skill, availability: "blocked", detail: "blocked by registry review or security scan" });
-      continue;
+      return {
+        unavailable: {
+          ...skill,
+          availability: "blocked",
+          detail: "blocked by registry review or security scan",
+        },
+      };
     }
 
     const verdict = verifyManifestEntry(registryDir, entry);
     if (!verdict.ok) {
-      unavailable.push({ ...skill, availability: "integrity-error", detail: verdict.reason ?? "integrity verification failed" });
+      sawIntegrityError = true;
+      integrityDetail = verdict.reason ?? integrityDetail;
       continue;
     }
 
-    available.push(skill);
+    return { resolved: { registryDir, entry } };
   }
 
-  return { available, unavailable };
+  if (skill.source !== "pi") {
+    return {
+      unavailable: {
+        ...skill,
+        availability: "fetchable",
+        detail: sawIntegrityError
+          ? `local copy failed integrity checks; dynamic refetch available (${integrityDetail})`
+          : "not cached locally; dynamic fetch + audit available",
+      },
+    };
+  }
+
+  return {
+    unavailable: {
+      ...skill,
+      availability: sawIntegrityError ? "integrity-error" : "missing",
+      detail: sawIntegrityError ? integrityDetail : "not mirrored in audited local registry",
+    },
+  };
+}
+
+function partitionMatchedSkills(
+  matchedSkills: MatchResult[],
+  registryDir: string,
+  cacheRegistryDir: string,
+): { skills: MatchResult[]; unavailableSkills: UnavailableSkill[] } {
+  const manifestCache = new Map<string, RegistryManifest>();
+  const registryDirs = [cacheRegistryDir, registryDir];
+  const skills: MatchResult[] = [];
+  const unavailableSkills: UnavailableSkill[] = [];
+
+  for (const skill of matchedSkills) {
+    const status = resolveLocalSkill(registryDirs, skill, manifestCache);
+    if (status.resolved) skills.push(skill);
+    else if (status.unavailable) unavailableSkills.push(status.unavailable);
+  }
+
+  return { skills, unavailableSkills };
 }
 
 export function createInstallPlan(
   projectDir: string,
   registryDir = getDefaultRegistryDir(projectDir),
   outputDir = join(projectDir, ".pi", "skills"),
+  cacheRegistryDir = getDefaultCacheRegistryDir(projectDir),
 ): InstallPlan {
   const detection = detectTechnologies(projectDir);
   const matchedSkills = matchSkills(detection);
-  const { available, unavailable } = partitionSkills(registryDir, matchedSkills);
+  const { skills, unavailableSkills } = partitionMatchedSkills(matchedSkills, registryDir, cacheRegistryDir);
 
   return {
     projectDir,
     registryDir,
+    cacheRegistryDir,
     outputDir,
     lockfilePath: join(projectDir, ".pi", "autoskills-lock.json"),
     technologies: detection.detected,
     isFrontend: detection.isFrontend,
     combos: detection.combos.map((combo) => ({ id: combo.id, name: combo.name })),
-    skills: available,
-    unavailableSkills: unavailable,
+    matchedSkills,
+    discoveredSkills: [],
+    skills,
+    unavailableSkills,
   };
 }
 
-export function installPlan(plan: InstallPlan, registryDir = plan.registryDir): InstallResult {
-  const manifest = loadManifest(registryDir);
-  mkdirSync(plan.outputDir, { recursive: true });
+export async function createInstallPlanWithDiscovery(
+  projectDir: string,
+  registryDir = getDefaultRegistryDir(projectDir),
+  outputDir = join(projectDir, ".pi", "skills"),
+  cacheRegistryDir = getDefaultCacheRegistryDir(projectDir),
+): Promise<InstallPlan> {
+  const base = createInstallPlan(projectDir, registryDir, outputDir, cacheRegistryDir);
+  const discoveredSkills = await discoverSkills(base);
+  const mergedMatchedSkills = [...base.matchedSkills];
+  const seen = new Set(mergedMatchedSkills.map((skill) => skill.registryId));
+
+  for (const skill of discoveredSkills) {
+    if (seen.has(skill.registryId)) continue;
+    seen.add(skill.registryId);
+    mergedMatchedSkills.push(skill);
+  }
+
+  const { skills, unavailableSkills } = partitionMatchedSkills(mergedMatchedSkills, registryDir, cacheRegistryDir);
+  return {
+    ...base,
+    matchedSkills: mergedMatchedSkills,
+    discoveredSkills,
+    skills,
+    unavailableSkills,
+  };
+}
+
+async function prepareSkillForInstall(
+  skill: MatchResult,
+  plan: InstallPlan,
+  manifestCache: Map<string, RegistryManifest>,
+): Promise<{ resolved?: ResolvedSkill; warning?: string }> {
+  const local = resolveLocalSkill([plan.cacheRegistryDir, plan.registryDir], skill, manifestCache);
+  if (local.resolved) return { resolved: local.resolved };
+
+  if (skill.source === "pi") {
+    return { warning: `Unavailable ${skill.registryId}: ${local.unavailable?.detail ?? "missing local skill"}` };
+  }
+
+  const fetched = await cacheSkillFromSource(skill, plan.cacheRegistryDir);
+  if (!fetched.ok || !fetched.entry) {
+    return { warning: `Dynamic fetch failed for ${skill.registryId}: ${fetched.reason ?? "unknown failure"}` };
+  }
+
+  manifestCache.delete(plan.cacheRegistryDir);
+  const verdict = verifyManifestEntry(plan.cacheRegistryDir, fetched.entry);
+  if (!verdict.ok) {
+    return { warning: `Integrity failure for ${skill.registryId}: ${verdict.reason}` };
+  }
+
+  return {
+    resolved: {
+      registryDir: plan.cacheRegistryDir,
+      entry: fetched.entry,
+    },
+  };
+}
+
+export async function installPlan(
+  plan: InstallPlan,
+  registryDir = plan.registryDir,
+  cacheRegistryDir = plan.cacheRegistryDir,
+): Promise<InstallResult> {
+  const effectivePlan: InstallPlan = {
+    ...plan,
+    registryDir,
+    cacheRegistryDir,
+  };
+
+  mkdirSync(effectivePlan.outputDir, { recursive: true });
+  mkdirSync(effectivePlan.cacheRegistryDir, { recursive: true });
 
   const installed: string[] = [];
   const skipped: string[] = [];
@@ -91,30 +231,19 @@ export function installPlan(plan: InstallPlan, registryDir = plan.registryDir): 
     generatedAt: new Date().toISOString(),
     skills: {} as Record<string, unknown>,
   };
+  const manifestCache = new Map<string, RegistryManifest>();
 
-  for (const skill of plan.skills) {
-    const entry = manifest.skills[skill.registryId];
-    if (!entry) {
-      warnings.push(`Missing registry entry: ${skill.registryId}`);
+  for (const skill of effectivePlan.matchedSkills) {
+    const prepared = await prepareSkillForInstall(skill, effectivePlan, manifestCache);
+    if (!prepared.resolved) {
       skipped.push(skill.registryId);
+      if (prepared.warning) warnings.push(prepared.warning);
       continue;
     }
 
-    if (entry.review.status === "rejected" || entry.securityCheck.status === "blocked") {
-      warnings.push(`Blocked skill: ${skill.registryId}`);
-      skipped.push(skill.registryId);
-      continue;
-    }
-
-    const verdict = verifyManifestEntry(registryDir, entry);
-    if (!verdict.ok) {
-      warnings.push(`Integrity failure for ${skill.registryId}: ${verdict.reason}`);
-      skipped.push(skill.registryId);
-      continue;
-    }
-
-    const src = join(registryDir, skill.registryId);
-    const dest = join(plan.outputDir, skill.registryId);
+    const { registryDir: sourceRegistryDir, entry } = prepared.resolved;
+    const src = join(sourceRegistryDir, skill.registryId);
+    const dest = join(effectivePlan.outputDir, skill.registryId);
     rmSync(dest, { recursive: true, force: true });
     copyVerifiedFiles(src, dest, entry.files);
 
@@ -129,14 +258,15 @@ export function installPlan(plan: InstallPlan, registryDir = plan.registryDir): 
       commitSha: entry.commitSha,
       bundleHash: entry.bundleHash,
       reasons: skill.reasons,
+      cachedIn: sourceRegistryDir,
     };
     installed.push(skill.registryId);
   }
 
-  mkdirSync(dirname(plan.lockfilePath), { recursive: true });
-  writeFileSync(plan.lockfilePath, JSON.stringify(lock, null, 2) + "\n");
+  mkdirSync(dirname(effectivePlan.lockfilePath), { recursive: true });
+  writeFileSync(effectivePlan.lockfilePath, JSON.stringify(lock, null, 2) + "\n");
 
-  return { installed, skipped, warnings, lockfilePath: plan.lockfilePath };
+  return { installed, skipped, warnings, lockfilePath: effectivePlan.lockfilePath };
 }
 
 export function readInstalledSkills(projectDir: string): string[] {

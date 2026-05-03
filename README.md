@@ -1,59 +1,56 @@
 # pi-autoskills
 
-```bash
-pi install /absolute/path/to/pi-autoskills
-```
+Audited autoskills-style skill installer for pi.
 
-Audited autoskills-style installer for pi.
+`pi-autoskills` detects stack from project files, matches skills from Claude/Codex/pi registries, prefers bundled audited local copies, and when needed fetches upstream bundles, audits + rewrites them into local cache, then installs only audited copies into `.pi/skills/`.
 
-`pi-autoskills` detects stack from project files, matches curated skills from Claude/Codex/pi registries, verifies mirrored local registry files with hashes, then installs only audited copies into `.pi/skills/`.
+## Why
 
-## Goals
+- detect stack fast
+- install useful pi skills with near-zero setup
+- never install live upstream skill content without local audit + rewrite first
+- keep bundled and cached registries hash-pinned and reproducible
+- support both CLI usage and `/autoskills` inside pi
 
-- detect common stack signals quickly
-- match best local audited skills
-- never install live random upstream skill content for end users
-- keep registry hash-pinned and reproducible
-- expose same workflow in CLI and pi command form
-
-## Current shape
-
-This repo now includes functioning v1 foundations:
+## Features
 
 - `pi-autoskills` CLI
 - `/autoskills` pi command
 - bundled audited registry under `registry/`
-- all mapped skills mirrored locally and installable
+- dynamic cache registry under `.pi/autoskills-registry/`
+- dynamic fetch + audit fallback for missing upstream skills
+- autoskills catalog adapter with GitHub-tree fallback discovery
+- policy file for allow/deny repos and discovery thresholds
+- per-skill audit artifacts under `.pi/autoskills-registry/.audit/`
 - manifest verification with file sha256 + bundle hash
 - strict install of manifest-listed files only
 - static security scan for prompt-injection and risky shell patterns
+- pi reviewer mode for model-based audits
 - install target: `.pi/skills/`
 - lockfile: `.pi/autoskills-lock.json`
-- autoskills-inspired detector with:
-  - package + devDependency detection
-  - scoped package pattern detection
-  - config-file detection
-  - config-content detection
-  - workspace detection for pnpm, npm workspaces, and Deno workspaces
-  - frontend file heuristics
-  - combo skill matching
 
-## Development setup
+## Requirements
+
+- Node.js `>= 22`
+- pnpm `>= 10` for development
+- [pi](https://www.npmjs.com/package/@mariozechner/pi-coding-agent) installed for `/autoskills` command and pi-based review mode
+
+## Install
+
+### Use CLI from source
 
 ```bash
 pnpm install
-pnpm check
+node --experimental-strip-types ./bin/pi-autoskills.ts --dry-run
 ```
 
-## Install package into pi
-
-### Local path
+### Install into pi from local checkout
 
 ```bash
 pi install /absolute/path/to/pi-autoskills
 ```
 
-### Project-local
+Project-local install:
 
 ```bash
 pi install -l /absolute/path/to/pi-autoskills
@@ -65,76 +62,209 @@ Then inside pi:
 /autoskills
 ```
 
+### After npm publish
+
+Global CLI:
+
+```bash
+npm install -g pi-autoskills
+pi-autoskills --dry-run
+```
+
+Or one-shot:
+
+```bash
+npx pi-autoskills --dry-run
+```
+
+Install package into pi from npm:
+
+```bash
+pi install pi-autoskills
+```
+
+Project-local package install into pi:
+
+```bash
+pi install -l pi-autoskills
+```
+
+## Quick start
+
+### 1. Preview matches in project
+
+```bash
+pi-autoskills --project /path/to/project --dry-run
+```
+
+### 2. Install skills
+
+```bash
+pi-autoskills --project /path/to/project
+```
+
+### 3. Use inside pi
+
+```text
+/autoskills detect
+/autoskills
+/autoskills install
+```
+
 ## CLI usage
 
 ```bash
 pi-autoskills --dry-run
 pi-autoskills --project /path/to/project
 pi-autoskills --registry-dir /path/to/registry
+pi-autoskills --cache-registry-dir /path/to/cache-registry
+pi-autoskills --reviewer auto|static|pi|none
 ```
 
-## pi command
+### Reviewer modes
+
+- `static` — static checks only. Default for plain CLI.
+- `pi` — static checks + model audit through pi harness.
+- `auto` — try pi review, fall back to static.
+- `none` — skip model review and keep static checks only.
+
+Examples:
+
+```bash
+pi-autoskills --reviewer static
+pi-autoskills --reviewer pi
+pi-autoskills --reviewer auto
+```
+
+## What gets written
+
+Bundled registry lives in `registry/`.
+
+Dynamic cache registry lives in `.pi/autoskills-registry/` inside target project by default.
+
+Policy file lives at `.pi/autoskills-policy.json` inside target project by default.
+
+Installed skills go to:
 
 ```text
-/autoskills
-/autoskills detect
-/autoskills install
+.pi/skills/
 ```
 
-- `detect` shows stack + matched skills
-- default command asks for confirmation before installing
-- `install` skips confirmation
+Lockfile:
 
-## Registry model
+```text
+.pi/autoskills-lock.json
+```
 
-Registry lives in `registry/`.
+Audit artifacts:
 
-Each skill bundle gets:
+```text
+.pi/autoskills-registry/.audit/
+```
 
-- normalized directory name
-- markdown-only files
-- manifest entry with provenance
-- `review.status`
-- `securityCheck.status`
-- `sha256` per file
-- `bundleHash` across whole bundle
-
-End-user install path:
+## Install flow
 
 1. detect stack
-2. match skill ids
-3. load local registry manifest
-4. verify hashes
-5. reject blocked skills
-6. copy verified bundle into `.pi/skills/<skill-id>/`
-7. write `.pi/autoskills-lock.json`
+2. match mapped skills
+3. discover extra candidates from autoskills catalog adapter, with GitHub-tree fallback
+4. apply policy filters and ranking
+5. check bundled registry + local cache registry
+6. if skill missing locally, fetch upstream bundle by pinned source repo/path
+7. normalize markdown bundle for pi
+8. run static review and optional pi-based model review
+9. write audited result into local cache registry with hashes + provenance
+10. write audit artifact JSON
+11. reject blocked skills
+12. copy verified bundle into `.pi/skills/<skill-id>/`
+13. write `.pi/autoskills-lock.json`
+
+## Policy config
+
+Default path:
+
+```text
+.pi/autoskills-policy.json
+```
+
+Example:
+
+```json
+{
+  "allowRepos": ["clerk/*", "vercel-labs/*", "supabase/*"],
+  "denyRepos": ["random/*"],
+  "minDiscoveryScore": 9,
+  "maxDiscoveredSkills": 6
+}
+```
+
+Environment override:
+
+```bash
+export PI_AUTOSKILLS_POLICY=/absolute/path/to/policy.json
+```
+
+## Catalog config
+
+Default catalog path in this project points at local autoskills registry clone.
+
+Override with:
+
+```bash
+export PI_AUTOSKILLS_CATALOG_INDEX=/absolute/path/to/index.json
+```
+
+If catalog missing, discovery falls back to GitHub repo tree scans.
+
+## Development
+
+```bash
+pnpm install
+pnpm check
+node --experimental-strip-types ./src/commands/validate-registry.ts
+```
 
 ## Maintainer workflow
 
-### Local mirrored bundles only
-
-Create or edit mirrored skill bundles in `registry/<skill-id>/`, then refresh manifest:
+### Refresh local mirrored bundles
 
 ```bash
 pnpm sync
 pnpm validate-registry
 ```
 
-### Upstream maintainer sync
-
-Fetch foreign skills from upstream GitHub repos, normalize into markdown-only pi bundles, run static review, then write registry entries:
+### Sync upstream bundles into bundled registry
 
 ```bash
 pnpm sync:upstream
 pnpm validate-registry
 ```
 
-Flags:
+Useful flags:
 
 ```bash
 node --experimental-strip-types ./src/commands/sync.ts --only react-best-practices --no-review
 node --experimental-strip-types ./src/commands/sync.ts --only vue --verbose --keep-temp
 ```
+
+## Release checklist
+
+### Before npm publish
+
+```bash
+pnpm check
+node --experimental-strip-types ./src/commands/validate-registry.ts
+```
+
+Then:
+
+- bump `package.json` version
+- review `README.md`
+- verify `files` list in `package.json`
+- publish package
+- test:
+  - `npx pi-autoskills --dry-run`
+  - `pi install pi-autoskills`
+  - `/autoskills detect`
 
 ## Layout
 
@@ -151,11 +281,14 @@ pi-autoskills/
 ├── src/
 │   ├── commands/
 │   ├── detect.ts
+│   ├── discovery.ts
 │   ├── install.ts
 │   ├── maps.ts
 │   ├── match.ts
+│   ├── policy.ts
 │   ├── registry.ts
 │   ├── security.ts
+│   ├── sync.ts
 │   └── types.ts
 └── test/
 ```
@@ -166,7 +299,7 @@ Still worth improving:
 
 - stronger source-specific adapters for Claude and Codex registry quirks
 - richer normalization for linked references and multi-file source bundles
-- score-based matching and combo ranking
+- native pi SDK reviewer instead of subprocess reviewer
 - explicit `update` command for refreshing installed skills
 - optional shared `.agents/skills/` mode
 

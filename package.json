@@ -1,7 +1,7 @@
 {
   "name": "pi-autoskills",
-  "version": "0.1.0",
-  "description": "Audited autoskills-style installer for pi. Detect stack, match vetted skills, verify hashes, install locally.",
+  "version": "0.2.0",
+  "description": "Audited autoskills-style installer for pi. Detect stack, discover vetted skills, audit upstream bundles, cache locally, install safely.",
   "author": "Denis Mrvoljak",
   "type": "module",
   "bin": {
