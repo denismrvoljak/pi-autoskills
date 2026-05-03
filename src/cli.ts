@@ -45,11 +45,19 @@ function printPlan(plan: ReturnType<typeof createInstallPlan>): void {
     for (const combo of plan.combos) console.log(`  - ${combo.name}`);
   }
   console.log("");
-  console.log(`Matched skills (${plan.skills.length}):`);
+  console.log(`Available skills (${plan.skills.length}):`);
   for (const skill of plan.skills) {
     console.log(`  - ${skill.registryId}  ← ${skill.reasons.join(", ")}`);
   }
   if (plan.skills.length === 0) console.log("  - none");
+
+  if (plan.unavailableSkills.length > 0) {
+    console.log("");
+    console.log(`Unavailable matches (${plan.unavailableSkills.length}):`);
+    for (const skill of plan.unavailableSkills) {
+      console.log(`  - ${skill.registryId}  ← ${skill.reasons.join(", ")} (${skill.availability}: ${skill.detail})`);
+    }
+  }
 }
 
 export async function runCli(argv = process.argv.slice(2)): Promise<number> {
@@ -59,12 +67,15 @@ export async function runCli(argv = process.argv.slice(2)): Promise<number> {
     return 0;
   }
 
-  const plan = createInstallPlan(args.projectDir);
+  const plan = createInstallPlan(args.projectDir, args.registryDir);
   printPlan(plan);
 
   if (args.dryRun) return 0;
 
   const result = installPlan(plan, args.registryDir);
+  for (const skill of plan.unavailableSkills) {
+    result.warnings.push(`Unavailable ${skill.registryId}: ${skill.detail}`);
+  }
   console.log("");
   console.log(`Installed: ${result.installed.length}`);
   for (const name of result.installed) console.log(`  ✓ ${name}`);

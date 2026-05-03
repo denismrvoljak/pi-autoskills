@@ -43,21 +43,21 @@ Each skill entry stores:
 
 ## v1 limitations
 
-Current implementation includes autoskills-inspired detection breadth, local registry install, and first maintainer sync pass for upstream GitHub skills.
+Current implementation includes autoskills-inspired detection breadth, bundled audited registry install, strict manifest-only copy, and pinned upstream GitHub sync.
 
-Missing pieces for full autoskills parity:
+Still missing for fuller autoskills parity:
 
 - stronger source-specific adapters for Claude and Codex registries
 - richer normalization for linked references and multi-file source bundles
-- stricter markdown-only allowlist enforcement in sync stage
 - signed downloadable remote registry distribution
 - richer scoring and stack combo ranking
+- explicit update workflow for already-installed skills
 
 ## Suggested next implementation slices
 
 1. harden upstream source adapters per registry family
 2. preserve and rewrite multi-file reference graphs more accurately
-3. add blocked file type rules and symlink/path traversal rejection
-4. add JSON review artifact per synced skill
-5. add registry CI validation
-6. add `pi-autoskills update`
+3. add JSON review artifact per synced skill
+4. add CI registry validation
+5. add `pi-autoskills update`
+6. add signed remote mirror support

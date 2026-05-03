@@ -54,6 +54,11 @@ export interface MatchResult {
   reasons: string[];
 }
 
+export interface UnavailableSkill extends MatchResult {
+  availability: "missing" | "blocked" | "integrity-error";
+  detail: string;
+}
+
 export interface RegistryReview {
   status: "approved" | "flagged" | "rejected";
   summary: string;
@@ -93,12 +98,14 @@ export interface RegistryManifest {
 
 export interface InstallPlan {
   projectDir: string;
+  registryDir: string;
   outputDir: string;
   lockfilePath: string;
   technologies: DetectedTechnology[];
   isFrontend: boolean;
   combos: Array<{ id: string; name: string }>;
   skills: MatchResult[];
+  unavailableSkills: UnavailableSkill[];
 }
 
 export interface InstallResult {

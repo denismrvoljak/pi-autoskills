@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
 import { scanSkillText, sha256 } from "./security.ts";
@@ -20,6 +20,10 @@ export function loadManifest(registryDir: string): RegistryManifest {
 function walkFiles(root: string, current: string, out: string[]): void {
   for (const entry of readdirSync(current, { withFileTypes: true })) {
     const abs = join(current, entry.name);
+    if (entry.isSymbolicLink()) {
+      const rel = abs.slice(root.length + 1).replaceAll("\\", "/");
+      throw new Error(`symlink not allowed: ${rel}`);
+    }
     if (entry.isDirectory()) {
       walkFiles(root, abs, out);
       continue;
@@ -36,9 +40,25 @@ export function verifyManifestEntry(registryDir: string, entry: RegistryEntry): 
     return { ok: false, reason: `missing skill dir ${entry.registryId}` };
   }
 
+  let actualFiles: string[];
+  try {
+    actualFiles = [];
+    walkFiles(skillDir, skillDir, actualFiles);
+  } catch (error) {
+    return { ok: false, reason: error instanceof Error ? error.message : "invalid skill dir" };
+  }
+  actualFiles.sort();
+
+  const expectedFiles = [...entry.files].sort();
+  if (actualFiles.length !== expectedFiles.length || actualFiles.some((file, index) => file !== expectedFiles[index])) {
+    return { ok: false, reason: "unexpected file set" };
+  }
+
   for (const rel of entry.files) {
     const path = join(skillDir, rel);
     if (!existsSync(path)) return { ok: false, reason: `missing file ${rel}` };
+    const stat = lstatSync(path);
+    if (!stat.isFile() || stat.isSymbolicLink()) return { ok: false, reason: `invalid file ${rel}` };
     const actual = sha256(readFileSync(path));
     if (actual !== entry.sha256[rel]) {
       return { ok: false, reason: `hash mismatch for ${rel}` };

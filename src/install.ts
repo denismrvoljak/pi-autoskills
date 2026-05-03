@@ -12,39 +12,74 @@ import { dirname, join } from "node:path";
 
 import { detectTechnologies } from "./detect.ts";
 import { matchSkills } from "./match.ts";
-import { loadManifest, verifyManifestEntry } from "./registry.ts";
-import type { InstallPlan, InstallResult } from "./types.ts";
+import { getDefaultRegistryDir, loadManifest, verifyManifestEntry } from "./registry.ts";
+import type { InstallPlan, InstallResult, MatchResult, UnavailableSkill } from "./types.ts";
 
-function copyDir(src: string, dest: string): void {
-  mkdirSync(dest, { recursive: true });
-  for (const entry of readdirSync(src, { withFileTypes: true })) {
-    const from = join(src, entry.name);
-    const to = join(dest, entry.name);
-    if (entry.isDirectory()) {
-      copyDir(from, to);
-    } else if (entry.isFile()) {
-      mkdirSync(dirname(to), { recursive: true });
-      copyFileSync(from, to);
-    }
+function copyVerifiedFiles(srcDir: string, destDir: string, files: string[]): void {
+  mkdirSync(destDir, { recursive: true });
+  for (const rel of files) {
+    const from = join(srcDir, rel);
+    const to = join(destDir, rel);
+    mkdirSync(dirname(to), { recursive: true });
+    copyFileSync(from, to);
   }
 }
 
-export function createInstallPlan(projectDir: string, outputDir = join(projectDir, ".pi", "skills")): InstallPlan {
+function partitionSkills(registryDir: string, skills: MatchResult[]): {
+  available: MatchResult[];
+  unavailable: UnavailableSkill[];
+} {
+  const manifest = loadManifest(registryDir);
+  const available: MatchResult[] = [];
+  const unavailable: UnavailableSkill[] = [];
+
+  for (const skill of skills) {
+    const entry = manifest.skills[skill.registryId];
+    if (!entry) {
+      unavailable.push({ ...skill, availability: "missing", detail: "not mirrored in audited local registry" });
+      continue;
+    }
+
+    if (entry.review.status === "rejected" || entry.securityCheck.status === "blocked") {
+      unavailable.push({ ...skill, availability: "blocked", detail: "blocked by registry review or security scan" });
+      continue;
+    }
+
+    const verdict = verifyManifestEntry(registryDir, entry);
+    if (!verdict.ok) {
+      unavailable.push({ ...skill, availability: "integrity-error", detail: verdict.reason ?? "integrity verification failed" });
+      continue;
+    }
+
+    available.push(skill);
+  }
+
+  return { available, unavailable };
+}
+
+export function createInstallPlan(
+  projectDir: string,
+  registryDir = getDefaultRegistryDir(projectDir),
+  outputDir = join(projectDir, ".pi", "skills"),
+): InstallPlan {
   const detection = detectTechnologies(projectDir);
-  const skills = matchSkills(detection);
+  const matchedSkills = matchSkills(detection);
+  const { available, unavailable } = partitionSkills(registryDir, matchedSkills);
 
   return {
     projectDir,
+    registryDir,
     outputDir,
     lockfilePath: join(projectDir, ".pi", "autoskills-lock.json"),
     technologies: detection.detected,
     isFrontend: detection.isFrontend,
     combos: detection.combos.map((combo) => ({ id: combo.id, name: combo.name })),
-    skills,
+    skills: available,
+    unavailableSkills: unavailable,
   };
 }
 
-export function installPlan(plan: InstallPlan, registryDir: string): InstallResult {
+export function installPlan(plan: InstallPlan, registryDir = plan.registryDir): InstallResult {
   const manifest = loadManifest(registryDir);
   mkdirSync(plan.outputDir, { recursive: true });
 
@@ -81,7 +116,7 @@ export function installPlan(plan: InstallPlan, registryDir: string): InstallResu
     const src = join(registryDir, skill.registryId);
     const dest = join(plan.outputDir, skill.registryId);
     rmSync(dest, { recursive: true, force: true });
-    copyDir(src, dest);
+    copyVerifiedFiles(src, dest, entry.files);
 
     if (entry.securityCheck.status === "warning") {
       warnings.push(`Warning for ${skill.registryId}: ${entry.securityCheck.summary}`);

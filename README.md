@@ -18,12 +18,14 @@ Audited autoskills-style installer for pi.
 
 ## Current shape
 
-This repo now includes practical v1 foundations:
+This repo now includes functioning v1 foundations:
 
 - `pi-autoskills` CLI
 - `/autoskills` pi command
-- local audited registry under `registry/`
+- bundled audited registry under `registry/`
+- all mapped skills mirrored locally and installable
 - manifest verification with file sha256 + bundle hash
+- strict install of manifest-listed files only
 - static security scan for prompt-injection and risky shell patterns
 - install target: `.pi/skills/`
 - lockfile: `.pi/autoskills-lock.json`
@@ -35,6 +37,13 @@ This repo now includes practical v1 foundations:
   - workspace detection for pnpm, npm workspaces, and Deno workspaces
   - frontend file heuristics
   - combo skill matching
+
+## Development setup
+
+```bash
+pnpm install
+pnpm check
+```
 
 ## Install package into pi
 
@@ -153,13 +162,12 @@ pi-autoskills/
 
 ## Next steps
 
-Planned next:
+Still worth improving:
 
 - stronger source-specific adapters for Claude and Codex registry quirks
 - richer normalization for linked references and multi-file source bundles
-- stricter file allowlist and path sandboxing
 - score-based matching and combo ranking
-- update command for refreshing installed skills
+- explicit `update` command for refreshing installed skills
 - optional shared `.agents/skills/` mode
 
 ## License

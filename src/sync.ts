@@ -1,6 +1,6 @@
 import { mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join, relative } from "node:path";
+import { dirname, join, posix, relative } from "node:path";
 
 import { COMBO_RULES, FRONTEND_BONUS_SKILLS, TECHNOLOGY_RULES } from "./maps.ts";
 import { writeManifest, loadManifest, createRegistryEntry } from "./registry.ts";
@@ -76,16 +76,16 @@ async function ghFetchJson(url: string): Promise<any> {
 
 async function resolveRepo(repo: string): Promise<RepoResolution> {
   const body = await ghFetchJson(`https://api.github.com/repos/${repo}`);
+  const branch = body.default_branch as string;
+  const branchData = await ghFetchJson(`https://api.github.com/repos/${repo}/branches/${branch}`);
   return {
     repo,
-    branch: body.default_branch,
-    sha: body.pushed_at ? body.default_branch : body.default_branch,
+    branch,
+    sha: branchData.commit.sha as string,
   };
 }
 
-async function fetchRepoTree(repo: string, branch: string): Promise<Array<{ path: string; type: string }>> {
-  const branchData = await ghFetchJson(`https://api.github.com/repos/${repo}/branches/${branch}`);
-  const sha = branchData.commit.sha as string;
+async function fetchRepoTree(repo: string, sha: string): Promise<Array<{ path: string; type: string }>> {
   const treeData = await ghFetchJson(`https://api.github.com/repos/${repo}/git/trees/${sha}?recursive=1`);
   return (treeData.tree || []) as Array<{ path: string; type: string }>;
 }
@@ -115,10 +115,10 @@ function inferRootDir(meta: SkillSource, tree: Array<{ path: string; type: strin
   return null;
 }
 
-async function downloadRawText(repo: string, branch: string, repoPath: string): Promise<string> {
+async function downloadRawText(repo: string, sha: string, repoPath: string): Promise<string> {
   const headers: Record<string, string> = { "User-Agent": "pi-autoskills-sync" };
   if (GITHUB_TOKEN) headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
-  const url = `https://raw.githubusercontent.com/${repo}/${branch}/${repoPath}`;
+  const url = `https://raw.githubusercontent.com/${repo}/${sha}/${repoPath}`;
   const res = await fetch(url, { headers });
   if (!res.ok) throw new Error(`raw fetch failed: ${res.status} ${url}`);
   return res.text();
@@ -126,7 +126,7 @@ async function downloadRawText(repo: string, branch: string, repoPath: string): 
 
 async function materializeSkill(meta: SkillSource, verbose = false): Promise<MaterializedSkill | null> {
   const repoInfo = await resolveRepo(meta.sourceRepo);
-  const tree = await fetchRepoTree(meta.sourceRepo, repoInfo.branch);
+  const tree = await fetchRepoTree(meta.sourceRepo, repoInfo.sha);
   const rootDir = inferRootDir(meta, tree);
   if (rootDir === null) return null;
 
@@ -143,7 +143,7 @@ async function materializeSkill(meta: SkillSource, verbose = false): Promise<Mat
   for (const file of files) {
     const rel = rootDir === "" ? file.path : file.path.slice(rootDir.length + 1);
     if (!isAllowedRel(rel)) continue;
-    const content = await downloadRawText(meta.sourceRepo, repoInfo.branch, file.path);
+    const content = await downloadRawText(meta.sourceRepo, repoInfo.sha, file.path);
     const dest = join(skillDir, rel);
     mkdirSync(dirname(dest), { recursive: true });
     writeFileSync(dest, content);
@@ -154,7 +154,7 @@ async function materializeSkill(meta: SkillSource, verbose = false): Promise<Mat
     meta,
     tempDir: tmpRoot,
     canonicalDir: skillDir,
-    commitSha: repoInfo.branch,
+    commitSha: repoInfo.sha,
   };
 }
 
@@ -171,7 +171,11 @@ function listFilesRecursive(dir: string): string[] {
 }
 
 function rewriteLinks(content: string): string {
-  return content.replace(/\]\((\.\.\/|\.\/)?([^#)]+\.md)\)/g, (_m, _prefix, target) => `](references/${target.replace(/^.*\//, "")})`);
+  return content.replace(/\]\(((?:\.\.\/|\.\/)?[^#)]+\.md)(#[^)]+)?\)/g, (_m, target, hash = "") => {
+    const normalized = posix.normalize(String(target).replace(/^\//, "")).replace(/^\.\//, "");
+    const safe = normalized.replace(/^(\.\.\/)+/, "");
+    return `](references/${safe}${hash})`;
+  });
 }
 
 function appendRuntimeSafety(content: string): string {
@@ -196,11 +200,10 @@ function normalizeSkill(materialized: MaterializedSkill): NormalizedFile[] {
   for (const file of files) {
     if (file === skillFile) continue;
     const rel = relative(materialized.canonicalDir, file).replaceAll("\\", "/");
-    const basename = rel.split("/").at(-1)!;
     const text = readFileSync(file, "utf8");
     if (Buffer.byteLength(text, "utf8") > MAX_TEXT_BYTES) continue;
     normalized.push({
-      rel: `references/${basename}`,
+      rel: `references/${rel}`,
       content: rewriteLinks(text),
     });
   }

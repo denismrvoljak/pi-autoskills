@@ -7,8 +7,8 @@ export default function autoskillsExtension(pi: ExtensionAPI) {
   pi.registerCommand("autoskills", {
     description: "Detect project stack and install audited local skills",
     handler: async (args, ctx) => {
-      const plan = createInstallPlan(ctx.cwd);
       const registryDir = getDefaultRegistryDir(ctx.cwd);
+      const plan = createInstallPlan(ctx.cwd, registryDir);
 
       if (plan.technologies.length === 0) {
         ctx.ui.notify("No matching technologies detected.", "info");
@@ -17,7 +17,8 @@ export default function autoskillsExtension(pi: ExtensionAPI) {
 
       const summary = [
         `Detected: ${plan.technologies.map((tech) => tech.name).join(", ")}`,
-        `Skills: ${plan.skills.map((skill) => skill.registryId).join(", ") || "none"}`,
+        `Available skills: ${plan.skills.map((skill) => skill.registryId).join(", ") || "none"}`,
+        `Unavailable matches: ${plan.unavailableSkills.map((skill) => `${skill.registryId} (${skill.detail})`).join(", ") || "none"}`,
       ].join("\n");
 
       if (args.trim() === "detect") {
@@ -31,6 +32,9 @@ export default function autoskillsExtension(pi: ExtensionAPI) {
       if (!ok) return;
 
       const result = installPlan(plan, registryDir);
+      for (const skill of plan.unavailableSkills) {
+        result.warnings.push(`Unavailable ${skill.registryId}: ${skill.detail}`);
+      }
       const lines = [
         `Installed: ${result.installed.join(", ") || "none"}`,
         `Skipped: ${result.skipped.join(", ") || "none"}`,
@@ -38,7 +42,7 @@ export default function autoskillsExtension(pi: ExtensionAPI) {
       if (result.warnings.length > 0) {
         lines.push(`Warnings: ${result.warnings.join(" | ")}`);
       }
-      ctx.ui.notify(lines.join("\n"), result.skipped.length > 0 ? "warning" : "success");
+      ctx.ui.notify(lines.join("\n"), result.skipped.length > 0 ? "warning" : "info");
     },
   });
 }

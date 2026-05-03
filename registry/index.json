@@ -1,7 +1,615 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-03T19:35:25.399Z",
+  "generatedAt": "2026-05-03T21:15:36.825Z",
   "skills": {
+    "react-best-practices": {
+      "registryId": "react-best-practices",
+      "source": "claude",
+      "sourceRepo": "vercel-labs/agent-skills",
+      "sourcePath": "react-best-practices/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "71ed7794962fa6e803ee83030517b5b93a9f70fbfeb431ec4535c5480a8d8355"
+      },
+      "bundleHash": "dae45f52d6d8251a69b5238468e62841333befafb7a689a9e1edf2533c092da6",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.817Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.818Z"
+      }
+    },
+    "composition-patterns": {
+      "registryId": "composition-patterns",
+      "source": "claude",
+      "sourceRepo": "vercel-labs/agent-skills",
+      "sourcePath": "composition-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "e38e0eaa609316b10423a9a138ed95e35099accd3f735585295c8a8f165c28a3"
+      },
+      "bundleHash": "df98441ec5790d7a21b7e36307711378979a1d739c5c235aec6f6b2ed688641b",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.818Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.818Z"
+      }
+    },
+    "next-best-practices": {
+      "registryId": "next-best-practices",
+      "source": "claude",
+      "sourceRepo": "vercel-labs/next-skills",
+      "sourcePath": "next-best-practices/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "c78f952d4e98bf3694856dbf70c03a6037d4e258ff3701f2642bfdf108549a25"
+      },
+      "bundleHash": "c53ef457c066bf0c1cc89975b78bcd53592f1b6d6d3f02abc2fc64ebfb098132",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.819Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.819Z"
+      }
+    },
+    "next-cache-components": {
+      "registryId": "next-cache-components",
+      "source": "claude",
+      "sourceRepo": "vercel-labs/next-skills",
+      "sourcePath": "next-cache-components/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "92fc6ac94c5cabdcd13c7dc7aabd6a4d04921e6295dfc00dd9888e375fd1ff4c"
+      },
+      "bundleHash": "82a02f95879e9adf1a5a89f9ca2f51813e41ff3bab3c723cc8905f5a926bdd30",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.819Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.819Z"
+      }
+    },
+    "next-upgrade": {
+      "registryId": "next-upgrade",
+      "source": "claude",
+      "sourceRepo": "vercel-labs/next-skills",
+      "sourcePath": "next-upgrade/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "562f9834d7c55c37498e0787fe431061f4bb766cd1dd6bb52441790593c7e1a8"
+      },
+      "bundleHash": "265833561c41038b4a626585b46186cff859b7f9b2254ae6b88d01648790a7b4",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.820Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.820Z"
+      }
+    },
+    "vue-debug-guides": {
+      "registryId": "vue-debug-guides",
+      "source": "claude",
+      "sourceRepo": "hyf0/vue-skills",
+      "sourcePath": "vue-debug-guides/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "c39cee74b0b6a4a8f7e50447ae9fd7494c80e86f50dc75753620e2ebeae22c3f"
+      },
+      "bundleHash": "67bd55c3afea5dbf435ce2209c10bdfae2ad7f6fe8d95e080b2de5230e27266f",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.820Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.820Z"
+      }
+    },
+    "vue": {
+      "registryId": "vue",
+      "source": "codex",
+      "sourceRepo": "antfu/skills",
+      "sourcePath": "vue/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "eba0d129cc4c2cf9c08116d4b136cc6800322985e831a9e04da4e97f3dca137a"
+      },
+      "bundleHash": "2e143444adf9edca698cf686665a478d11ce266d20a1700968146f8bcb74800b",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.820Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.820Z"
+      }
+    },
+    "vue-best-practices": {
+      "registryId": "vue-best-practices",
+      "source": "codex",
+      "sourceRepo": "antfu/skills",
+      "sourcePath": "vue-best-practices/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "05b373713e6bbd216fb3ee9709289b68bcdeb9eac8ffea477e35bdbd8e0f9acd"
+      },
+      "bundleHash": "0cc09c7642af61d67a6889a27e558b3721072eb5927869ee65bd6d200ff3854b",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.820Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.820Z"
+      }
+    },
+    "nuxt": {
+      "registryId": "nuxt",
+      "source": "codex",
+      "sourceRepo": "antfu/skills",
+      "sourcePath": "nuxt/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "1022ec1de47ea1ad86a2a95c296527a17abe71affe88092f8a4949fd6897da13"
+      },
+      "bundleHash": "9b4aa042a45ee4e9f6314ede988e29d73147ef2d74d372ae475b74f8fdb7efe6",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.820Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.820Z"
+      }
+    },
+    "svelte5-best-practices": {
+      "registryId": "svelte5-best-practices",
+      "source": "claude",
+      "sourceRepo": "ejirocodes/agent-skills",
+      "sourcePath": "svelte5-best-practices/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "eeb2be3e32085d47ad5938afd6e96b2a4f9fd9e073ca27ec3f6df32371689b7c"
+      },
+      "bundleHash": "c32977dff5ffe8ee419804325d0843227b1c4fe20c26142fbf1ac6795670a214",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.820Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.820Z"
+      }
+    },
+    "svelte-code-writer": {
+      "registryId": "svelte-code-writer",
+      "source": "claude",
+      "sourceRepo": "sveltejs/ai-tools",
+      "sourcePath": "svelte-code-writer/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "cc8fa3ac4a382aeb1cda3e6e9244abe785ab0e3364105bf45ea8bbb94f4301bf"
+      },
+      "bundleHash": "b5e12f4a6369f9e482d863fd0dde5cfc215041947902dacc416a2f9a50da166a",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.821Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.821Z"
+      }
+    },
+    "angular-developer": {
+      "registryId": "angular-developer",
+      "source": "claude",
+      "sourceRepo": "angular/skills",
+      "sourcePath": "angular-developer/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "faf49f2c11fb19085ff4cdfc985adc8bf27e888b122e309da6fb00b17b7b1e5b"
+      },
+      "bundleHash": "62de7ae6824757487a696480d35035006c98af2ca76033911d5b364512b2f09a",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.821Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.821Z"
+      }
+    },
+    "reference-core": {
+      "registryId": "reference-core",
+      "source": "claude",
+      "sourceRepo": "angular/angular",
+      "sourcePath": "reference-core/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "c4c1c69569c62394fd6727ed0d09ca281d842fe48fd812d766e56b11320239d6"
+      },
+      "bundleHash": "c58f7263272eef8b59bccbb62887ac82c57e6eb3cee2b4a8dbc15e3887e12774",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.821Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.821Z"
+      }
+    },
+    "reference-signal-forms": {
+      "registryId": "reference-signal-forms",
+      "source": "claude",
+      "sourceRepo": "angular/angular",
+      "sourcePath": "reference-signal-forms/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "deb57ed84c4646e470c319a819653bc9ac2802a3cdb3a42a667e8825d282f299"
+      },
+      "bundleHash": "055fc2b36fc596e4f2320f33ea57bddfc9a02b3c06a6b1c85cb83b702f65ab05",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.821Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.821Z"
+      }
+    },
+    "astro": {
+      "registryId": "astro",
+      "source": "claude",
+      "sourceRepo": "astrolicious/agent-skills",
+      "sourcePath": "astro/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "64b0cfb9774b1dae0c7c86cc186508822588f903e8d6165ddd4e699e1c2710a8"
+      },
+      "bundleHash": "2afd3a02edf4374598ce471dabb1ab5638851dbf7b82d0bb36f1019331eafb54",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.821Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.821Z"
+      }
+    },
+    "tailwind-css-patterns": {
+      "registryId": "tailwind-css-patterns",
+      "source": "codex",
+      "sourceRepo": "giuseppe-trisciuoglio/developer-kit",
+      "sourcePath": "tailwind-css-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "63984406824ef934b457d34db25a5892b5375a82e31845159e6e97179c5acf4c"
+      },
+      "bundleHash": "f9c5f159f3f085deaffaa97d88c68f3596e7ebb97d25c0871b96421fa9558e4e",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.821Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.821Z"
+      }
+    },
+    "shadcn": {
+      "registryId": "shadcn",
+      "source": "claude",
+      "sourceRepo": "shadcn/ui",
+      "sourcePath": "shadcn/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "c5a5c3a8e380ab7d49369c68a715b2da6b1bcc449898cfdf787bbab8cb13a5d9"
+      },
+      "bundleHash": "bd0d2db9f06c85f1bcd4f21e2319f0cf709a553ec6b88f45ad1f1470e21d3839",
+      "review": {
+        "status": "flagged",
+        "summary": "Static security scan found warning patterns.",
+        "flags": [
+          "SKILL.md: Contains absolutist action language."
+        ],
+        "reviewedAt": "2026-05-03T21:15:36.822Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "warning",
+        "summary": "Warnings found by static security scan.",
+        "findings": [
+          "SKILL.md: Contains absolutist action language."
+        ],
+        "checkedAt": "2026-05-03T21:15:36.822Z"
+      }
+    },
+    "typescript-advanced-types": {
+      "registryId": "typescript-advanced-types",
+      "source": "codex",
+      "sourceRepo": "wshobson/agents",
+      "sourcePath": "typescript-advanced-types/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "c142f64de35a7c7518e62d4a5c5b18800bbe4391be14ba45a5d049adfcf01c57"
+      },
+      "bundleHash": "5ca0e177c6aaaba1889255691224daafdb7d71f317cc70bede1590d3907ded42",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.822Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.822Z"
+      }
+    },
+    "vite": {
+      "registryId": "vite",
+      "source": "codex",
+      "sourceRepo": "antfu/skills",
+      "sourcePath": "vite/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "3cb7a75336e338faa9be15dd8b97479721ac8ceac6f1ff4061c9b9eefccd9983"
+      },
+      "bundleHash": "8b484622e802a30ebc5eb5d6df8f82d088c717f37e95670436b93efcadd824d6",
+      "review": {
+        "status": "rejected",
+        "summary": "Static security scan found blocked patterns.",
+        "flags": [
+          "SKILL.md: Targets sensitive local secrets."
+        ],
+        "reviewedAt": "2026-05-03T21:15:36.822Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "blocked",
+        "summary": "Blocked by static security scan.",
+        "findings": [
+          "SKILL.md: Targets sensitive local secrets."
+        ],
+        "checkedAt": "2026-05-03T21:15:36.822Z"
+      }
+    },
+    "playwright-best-practices": {
+      "registryId": "playwright-best-practices",
+      "source": "claude",
+      "sourceRepo": "currents-dev/playwright-best-practices-skill",
+      "sourcePath": "playwright-best-practices/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "d54f14eb2da39b9c1b9135b2705f21623fa7e27ac490225686daa360e34aa6d8"
+      },
+      "bundleHash": "86dd6745f5e70222219e1e75ef5791c6f2886acefe3c7cab5e3baf28c07fbc06",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.822Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.822Z"
+      }
+    },
     "vitest-testing-patterns": {
       "registryId": "vitest-testing-patterns",
       "source": "pi",
@@ -19,7 +627,7 @@
         "status": "approved",
         "summary": "Static security scan found no risky patterns.",
         "flags": [],
-        "reviewedAt": "2026-05-03T19:35:25.397Z",
+        "reviewedAt": "2026-05-03T21:15:36.822Z",
         "reviewer": {
           "model": "static-rules",
           "promptVersion": "0.1.0"
@@ -29,7 +637,457 @@
         "status": "ok",
         "summary": "Passed static security scan.",
         "findings": [],
-        "checkedAt": "2026-05-03T19:35:25.398Z"
+        "checkedAt": "2026-05-03T21:15:36.822Z"
+      }
+    },
+    "react-hook-form": {
+      "registryId": "react-hook-form",
+      "source": "codex",
+      "sourceRepo": "pproenca/dot-skills",
+      "sourcePath": "react-hook-form/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "075337d6070c7568851ce02e90ccb4b62e9b21017d140d754a75a90a471eafd5"
+      },
+      "bundleHash": "cc9f40c93d6d891610e1f71431c8a50fda4dc17ab743facf68ec002d1ac002d8",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.823Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.823Z"
+      }
+    },
+    "zod": {
+      "registryId": "zod",
+      "source": "codex",
+      "sourceRepo": "pproenca/dot-skills",
+      "sourcePath": "zod/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "245fc4ab7341a8ac0864c9535e2a6d782aaf012ba6975a36cd51240bcf82e443"
+      },
+      "bundleHash": "1a734fbf39718fc20a9b2f62292ffb5fb4e8729d44b258b3c51771437ef72813",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.823Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.823Z"
+      }
+    },
+    "prisma-patterns": {
+      "registryId": "prisma-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "prisma-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "9b239b4180afcacd3adf85ba641ea60639e18272a215dafa2f4dd3e525d0d22b"
+      },
+      "bundleHash": "e6742e5380af4134f22c3c2e9f9bc7296473e971e2461ed76e42ed443fa93ba0",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.823Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.823Z"
+      }
+    },
+    "drizzle-patterns": {
+      "registryId": "drizzle-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "drizzle-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "24f9956363c44639a374af667275986297cc28b1d7cf6379392f2dacf8e6428e"
+      },
+      "bundleHash": "8be369f162d3d8a87e3861ef85d3b10a35af81104a8c6d7b9487ed9357d65981",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.823Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.823Z"
+      }
+    },
+    "supabase-postgres-best-practices": {
+      "registryId": "supabase-postgres-best-practices",
+      "source": "claude",
+      "sourceRepo": "supabase/agent-skills",
+      "sourcePath": "supabase-postgres-best-practices/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "ccd6e4596bd51cf344fe76c464867c541ccc16b6d90ae7a9db449fb17588613b"
+      },
+      "bundleHash": "f2d4167e0469916b630c9c7aba135b097e0d8c2f55f194c93f97d26e108ce74a",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.823Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.823Z"
+      }
+    },
+    "node-express-patterns": {
+      "registryId": "node-express-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "node-express-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "a3207c2405ffa3d99d9e6940368bc4d59a3f22e3b8832492ee7d917b45391c80"
+      },
+      "bundleHash": "6756191d91220c789c7e2fbc7ff23cca67cd4fa68fd05d3347364ec5e154e026",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.823Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.823Z"
+      }
+    },
+    "clerk": {
+      "registryId": "clerk",
+      "source": "claude",
+      "sourceRepo": "clerk/skills",
+      "sourcePath": "clerk/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "60094930cdd36257691589dc346328b0efa4060da329df571275aa83c06566c2"
+      },
+      "bundleHash": "fb1a2d626fa0506151f7fb635ef32727dc0552872b020588aeb1709d4bd2418d",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.824Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.824Z"
+      }
+    },
+    "clerk-setup": {
+      "registryId": "clerk-setup",
+      "source": "claude",
+      "sourceRepo": "clerk/skills",
+      "sourcePath": "clerk-setup/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "0225ed4f6a7d4623aa651868ff8b36b63564a6dd925563db9f3533abe72d47d2"
+      },
+      "bundleHash": "1129dae25a643f409325adefc674eec06188facb08487f39bdcdcfb350329ce5",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.824Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.824Z"
+      }
+    },
+    "best-practices": {
+      "registryId": "best-practices",
+      "source": "claude",
+      "sourceRepo": "better-auth/skills",
+      "sourcePath": "best-practices/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "c62acc0464f80bf8be72e0b55046a06c7762fa1ffaac1e78f61159b50072c9cf"
+      },
+      "bundleHash": "0d59bc23f61ba03b850aa3b81392044c5c7fa3662a5f61b98490b20b0f14a56a",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.824Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.824Z"
+      }
+    },
+    "emailAndPassword": {
+      "registryId": "emailAndPassword",
+      "source": "claude",
+      "sourceRepo": "better-auth/skills",
+      "sourcePath": "emailAndPassword/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "ef9b2d86e9e0ef89f1e8fd62ec86df212a370d4c8f6ebe43936e6f225c94cb63"
+      },
+      "bundleHash": "1cbc9527756aa933c0f2f5ad7f18fe493f78ef0f4b6f073b624fbf6ccbd463c9",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.824Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.824Z"
+      }
+    },
+    "go-project-patterns": {
+      "registryId": "go-project-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "go-project-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "de2f7039300410e3657175342f3f7b0b26af9b4601f45b8887bb62904f59cb02"
+      },
+      "bundleHash": "d97cb7ff27ce8e8ac51e3e1756904f99246a425e3419fbfe71b1b0ab3c3882a0",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.824Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.824Z"
+      }
+    },
+    "deno-patterns": {
+      "registryId": "deno-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "deno-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "25e910302285edbfb03234277cca4ef1f6663c0010511de9f59d3c48fee375b9"
+      },
+      "bundleHash": "f5223a00879116d02eaa425c88654cd42022790d37263099a6327af7c280eee9",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.824Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.824Z"
+      }
+    },
+    "aws-patterns": {
+      "registryId": "aws-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "aws-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "de88d15db982f9d1e27aa2a5b383a58a1d20c772a9b08ec36708f3046dbd664f"
+      },
+      "bundleHash": "356644ba86456f37f47d20cb2d9f5f91d623416037ff8def6d211dcbc2590e24",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.824Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.824Z"
+      }
+    },
+    "azure-patterns": {
+      "registryId": "azure-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "azure-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "920e6cc78043b3c3cc7de78e0a74884f60ef26e0005e97d0dce6b345db6d1081"
+      },
+      "bundleHash": "a65b55080a79fcacc05e9d24f7a822c648d6784e9c7c8ddd7eef08393db52693",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.824Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.824Z"
+      }
+    },
+    "wordpress-patterns": {
+      "registryId": "wordpress-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "wordpress-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "82f080f400fd59dc5f0cb13281eea7aa1ee4b78432fb0f59f5019b2d17104afd"
+      },
+      "bundleHash": "652d84a937ce3daf4b7b1590cc0aa982417f253bfc0c77b2027d8a2251ab8f5a",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.824Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.824Z"
       }
     },
     "next-playwright-testing": {
@@ -49,7 +1107,7 @@
         "status": "approved",
         "summary": "Static security scan found no risky patterns.",
         "flags": [],
-        "reviewedAt": "2026-05-03T19:35:25.398Z",
+        "reviewedAt": "2026-05-03T21:15:36.824Z",
         "reviewer": {
           "model": "static-rules",
           "promptVersion": "0.1.0"
@@ -59,7 +1117,7 @@
         "status": "ok",
         "summary": "Passed static security scan.",
         "findings": [],
-        "checkedAt": "2026-05-03T19:35:25.398Z"
+        "checkedAt": "2026-05-03T21:15:36.824Z"
       }
     },
     "react-tailwind-ui-patterns": {
@@ -79,7 +1137,7 @@
         "status": "approved",
         "summary": "Static security scan found no risky patterns.",
         "flags": [],
-        "reviewedAt": "2026-05-03T19:35:25.398Z",
+        "reviewedAt": "2026-05-03T21:15:36.825Z",
         "reviewer": {
           "model": "static-rules",
           "promptVersion": "0.1.0"
@@ -89,7 +1147,67 @@
         "status": "ok",
         "summary": "Passed static security scan.",
         "findings": [],
-        "checkedAt": "2026-05-03T19:35:25.398Z"
+        "checkedAt": "2026-05-03T21:15:36.825Z"
+      }
+    },
+    "react-shadcn-patterns": {
+      "registryId": "react-shadcn-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "react-shadcn-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "ee438b6453be8c0a70cd0fa9efe14f96324d787072610260c6d0d50296c22388"
+      },
+      "bundleHash": "9bdad9ec6e76442c0dc8b6a995c6e49aaf2fb8d624b733bed02e9144ffd0b20f",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.825Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.825Z"
+      }
+    },
+    "react-hook-form-zod-patterns": {
+      "registryId": "react-hook-form-zod-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "react-hook-form-zod-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "2d6498760850437746303c57a4db3a485c4a50e0046197328d91d48a04ebb119"
+      },
+      "bundleHash": "8982c097527e0c58bee6db9ed69f3667ad867a98737a308465f7cdd75b87a8fa",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T21:15:36.825Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T21:15:36.825Z"
       }
     },
     "frontend-accessibility-basics": {
@@ -109,7 +1227,7 @@
         "status": "approved",
         "summary": "Static security scan found no risky patterns.",
         "flags": [],
-        "reviewedAt": "2026-05-03T19:35:25.399Z",
+        "reviewedAt": "2026-05-03T21:15:36.825Z",
         "reviewer": {
           "model": "static-rules",
           "promptVersion": "0.1.0"
@@ -119,7 +1237,7 @@
         "status": "ok",
         "summary": "Passed static security scan.",
         "findings": [],
-        "checkedAt": "2026-05-03T19:35:25.399Z"
+        "checkedAt": "2026-05-03T21:15:36.825Z"
       }
     },
     "frontend-seo-basics": {
@@ -139,7 +1257,7 @@
         "status": "approved",
         "summary": "Static security scan found no risky patterns.",
         "flags": [],
-        "reviewedAt": "2026-05-03T19:35:25.399Z",
+        "reviewedAt": "2026-05-03T21:15:36.825Z",
         "reviewer": {
           "model": "static-rules",
           "promptVersion": "0.1.0"
@@ -149,7 +1267,7 @@
         "status": "ok",
         "summary": "Passed static security scan.",
         "findings": [],
-        "checkedAt": "2026-05-03T19:35:25.399Z"
+        "checkedAt": "2026-05-03T21:15:36.825Z"
       }
     }
   }
