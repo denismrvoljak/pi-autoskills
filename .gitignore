@@ -1,0 +1,6 @@
+node_modules/
+.pnpm-store/
+coverage/
+.DS_Store
+*.log
+.autoskills-cache/

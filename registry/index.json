@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-03T19:35:25.399Z",
+  "skills": {
+    "vitest-testing-patterns": {
+      "registryId": "vitest-testing-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "vitest-testing-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "98ffb7635a45fe1932ce15b9904f8ed7393974ce8a5f2b1f9ec4c88b3e14f5f3"
+      },
+      "bundleHash": "4e5e75ba804e8eb94ff751aa0a4ee4dbb5ec79933bb88f30d89f57d7142661ad",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T19:35:25.397Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T19:35:25.398Z"
+      }
+    },
+    "next-playwright-testing": {
+      "registryId": "next-playwright-testing",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "next-playwright-testing/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "ed14cc35448a107054035690717edd30040cced9031488c7c4a2cd14f70e38ab"
+      },
+      "bundleHash": "7dfb36a9869fd7163889776612a36e3949f3dddb9c73b2dcb5e7b4bb3aa64ae9",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T19:35:25.398Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T19:35:25.398Z"
+      }
+    },
+    "react-tailwind-ui-patterns": {
+      "registryId": "react-tailwind-ui-patterns",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "react-tailwind-ui-patterns/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "2d89c027582789cdd71c0e6f180ce4099addda7d8c516bb509bfc0dfe8ecc3ca"
+      },
+      "bundleHash": "a6df37fd6315e0877cb5ff5b459436c0db87390dc889fe43602f342b7b082d2b",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T19:35:25.398Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T19:35:25.398Z"
+      }
+    },
+    "frontend-accessibility-basics": {
+      "registryId": "frontend-accessibility-basics",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "frontend-accessibility-basics/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "dfbbeff1597eaf5c8b50f4004ac0622d3329fe47a25a25bf1911baa5776280e1"
+      },
+      "bundleHash": "db9da0b42e29cf650990995fb6ccea22b077e226a70ab8f3a4cdb3a170ef01cc",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T19:35:25.399Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T19:35:25.399Z"
+      }
+    },
+    "frontend-seo-basics": {
+      "registryId": "frontend-seo-basics",
+      "source": "pi",
+      "sourceRepo": "pi-autoskills/registry",
+      "sourcePath": "frontend-seo-basics/SKILL.md",
+      "commitSha": "local-dev",
+      "files": [
+        "SKILL.md"
+      ],
+      "sha256": {
+        "SKILL.md": "c4c648562a40cfc44d19a4165d7aa8549d63a54c96a7e750ce099dbb73b1d86f"
+      },
+      "bundleHash": "98004a452077ee2b2cc0670728451626dc08f730f9c2c85a6a53d9899df35ef4",
+      "review": {
+        "status": "approved",
+        "summary": "Static security scan found no risky patterns.",
+        "flags": [],
+        "reviewedAt": "2026-05-03T19:35:25.399Z",
+        "reviewer": {
+          "model": "static-rules",
+          "promptVersion": "0.1.0"
+        }
+      },
+      "securityCheck": {
+        "status": "ok",
+        "summary": "Passed static security scan.",
+        "findings": [],
+        "checkedAt": "2026-05-03T19:35:25.399Z"
+      }
+    }
+  }
+}
